@@ -1,2 +1,3 @@
 agent/node_modules
 .env
+ollama_agent/node_modules
