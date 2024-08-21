@@ -1,3 +1,4 @@
 agent/node_modules
 .env
 ollama_agent/node_modules
+agentic_rag/node_modules
