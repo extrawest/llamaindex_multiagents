@@ -1,4 +1,4 @@
-# Analysis Agent
+# LlamaIndex Multiagent
 
 This project is a multiagent Node.js application that uses advanced AI and natural language processing techniques to analyze and answer questions about the provided resources and related information. It combines document parsing, vector storage, and an AI agent to provide intelligent responses. You can find several variations including simple agent, rag and vector embeddings.
 
