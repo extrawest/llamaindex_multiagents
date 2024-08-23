@@ -11,6 +11,7 @@ import {
 } from 'llamaindex';
 import 'dotenv/config';
 import fs from 'node:fs/promises';
+import readline from 'readline';
 
 async function main() {
     const PARSING_CACHE = './cache.json';
@@ -34,10 +35,6 @@ async function main() {
     const vectorStore = new QdrantVectorStore({
         url: 'http://localhost:6333',
     });
-
-    // load our data and create a query engine
-    // const reader = new LlamaParseReader({ resultType: 'text' });
-    // const documents = await reader.loadData('../data/sf_budget_2023_2024.pdf');
 
     let cache = {};
     let cacheExists = false;
@@ -67,18 +64,15 @@ async function main() {
         vectorStore,
     });
     const retriever = await index.asRetriever();
-    //try to change to topK =
     retriever.similarityTopK = 10;
     const queryEngine = await index.asQueryEngine({
         retriever,
     });
 
-    // define a function to sum up numbers
     const sumNumbers = ({ a, b }) => {
         return `${a + b}`;
     };
 
-    // define the query engine as a tool
     const tools = [
         new QueryEngineTool({
             queryEngine: queryEngine,
@@ -107,26 +101,28 @@ async function main() {
         }),
     ];
 
-    // create the agent
     const agent = new OpenAIAgent({ tools });
 
-    let response = await agent.chat({
-        message:
-            "What's the budget of San Francisco for the health service system in 2023-24?",
+    const rl = readline.createInterface({
+        input: process.stdin,
+        output: process.stdout,
     });
-    console.log(response);
 
-    let response2 = await agent.chat({
-        message:
-            "What's the budget of San Francisco for the police department in 2023-24?",
-    });
-    console.log(response2);
+    const askQuestion = (query) => {
+        return new Promise((resolve) => rl.question(query, resolve));
+    };
 
-    let response3 = await agent.chat({
-        message:
-            "What's the combined budget of San Francisco for the health service system and police department in 2023-24?",
-    });
-    console.log(response3);
+    while (true) {
+        const message = await askQuestion(
+            "Enter your prompt (or 'exit' to quit): "
+        );
+        if (message.toLowerCase() === 'exit') {
+            rl.close();
+            break;
+        }
+        const response = await agent.chat({ message });
+        // console.log(response);
+    }
 }
 
 main().catch(console.error);
