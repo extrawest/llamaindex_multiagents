@@ -3,4 +3,5 @@ agent/node_modules
 ollama_agent/node_modules
 agentic_rag/node_modules
 rag_tools/node_modules
+quadrant/node_modules
 llama_parse/node_modules
