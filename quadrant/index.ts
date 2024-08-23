@@ -27,10 +27,10 @@ async function main() {
     });
 
     Settings.callbackManager.on('llm-tool-call', (event) => {
-        console.log(event.detail.payload);
+        // console.log(event.detail.payload);
     });
     Settings.callbackManager.on('llm-tool-result', (event) => {
-        console.log(event.detail.payload);
+        // console.log(event.detail.payload);
     });
     const vectorStore = new QdrantVectorStore({
         url: 'http://localhost:6333',
@@ -121,7 +121,7 @@ async function main() {
             break;
         }
         const response = await agent.chat({ message });
-        // console.log(response);
+        console.log(response.message.content);
     }
 }
 
